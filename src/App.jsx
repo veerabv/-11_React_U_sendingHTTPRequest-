@@ -40,7 +40,7 @@ function App() {
       
       await updateUserPlaces([selectedPlace, ...userPlaces]);
     } catch (err) {
-      console.log("Errr....");
+      console.log("Errr....",err.message);
       setUserPlaces(userPlaces);
       setUpdateError({
         message: err.message || "Error while updating the place",
@@ -52,6 +52,17 @@ function App() {
     setUserPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current.id)
     );
+
+    try{
+      await updateUserPlaces(userPlaces.filter(place => place.id !== selectedPlace.current.id))
+
+    }catch(err){
+      setUserPlaces(userPlaces);
+      setUpdateError({
+        message: err.message || "Error while deleting the place",
+      });
+
+    }
 
     setModalIsOpen(false);
   }, []);
